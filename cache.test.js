@@ -2,7 +2,7 @@ const {createCache} = require('./cache');
 
 describe("Basic API", () => {
   test('API is known and consistent', () => {
-    const {set, get, has, cache, purge, remove, size, ...rest} = createCache({flag: 'hello', launchDarklyUser: 'brian'})
+    const {set, get, has, cache, purge, remove, size, ...rest} = createCache()
     expect(typeof(cache)).toBe('function')
     expect(typeof(has)).toBe('function')
     expect(typeof(get)).toBe('function')
@@ -14,21 +14,21 @@ describe("Basic API", () => {
   })
 
   test('can get() and set() a cache value', () => {
-    const {set, get} = createCache({flag: 'hello', launchDarklyUser: 'brian'})
+    const {set, get} = createCache()
     expect(get('flavor')).toBeUndefined()
     set('flavor', 'sidewalk');
     expect(get('flavor')).toBe('sidewalk')
   })
 
   test('has() reports of the cache key is present', () => {
-    const {set, has} = createCache({flag: 'hello', launchDarklyUser: 'brian'})
+    const {set, has} = createCache()
     expect(has('flavor')).toBe(false)
     set('flavor', 'sidewalk');
     expect(has('flavor')).toBe(true)
   })
 
   test('remove() works to remove a cache valye', () => {
-    const {set, has, remove} = createCache({flag: 'hello', launchDarklyUser: 'brian'})
+    const {set, has, remove} = createCache()
     expect(has('flavor')).toBe(false)
     set('flavor', 'sidewalk');
     expect(has('flavor')).toBe(true)
@@ -37,7 +37,7 @@ describe("Basic API", () => {
   })
 
   test('purge() removes all of the cache', () => {
-    const {set, has, purge, get} = createCache({flag: 'hello', launchDarklyUser: 'brian'})
+    const {set, has, purge, get} = createCache()
     expect(has('flavor')).toBe(false)
     set('flavor', 'sidewalk');
     expect(has('flavor')).toBe(true)
@@ -48,7 +48,7 @@ describe("Basic API", () => {
 
   test("cache() will execute the callback function on miss", async () => {
     let callCount = 0;
-    const {cache, has, get} = createCache({flag: 'hello', launchDarklyUser: 'brian'})
+    const {cache, has, get} = createCache()
     expect(has('flavor')).toBe(false)
 
     const value = await cache('flavor', () => {callCount++; return 'toothpaste'})
@@ -62,7 +62,7 @@ describe("Basic API", () => {
   })
 
   test("size() returns the number of bytes in the cache", () => {
-    const {set, size, remove} = createCache({flag: 'hello', launchDarklyUser: 'brian'})
+    const {set, size, remove} = createCache()
     expect(size()).toBe(0);
     set('flavor', 'feet');
     expect(size()).toBeGreaterThan(0)
@@ -79,7 +79,7 @@ describe("Basic API", () => {
 describe("Least Recently Used is working", () => {
   let get, set, has, size;
   beforeEach(() => {
-    cacheObject = createCache({maxSizeInBytes: 50, flag: 'hello', launchDarklyUser: 'brian'})
+    cacheObject = createCache({maxSizeInBytes: 50})
     get = cacheObject.get
     set = cacheObject.set
     has = cacheObject.has

@@ -1,5 +1,5 @@
 
-function createCache({maxSizeInBytes = -1, flag, launchDarklyUser}) {
+function createCache({maxSizeInBytes = -1} = {}) {
   const store = new Map();
   const usedKeyStack = new Set();
 
